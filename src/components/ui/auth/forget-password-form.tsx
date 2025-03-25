@@ -7,7 +7,7 @@ import { useActionState } from "react";
 import Button from "../Button";
 import { AllRoutesEnum } from "@/lib/enums";
 
-export default function LoginForm() {
+export default function ForgetPasswordForm() {
   const [errorMessage, dispatch, loading] = useActionState(
     handleSignIn,
     undefined
@@ -16,7 +16,7 @@ export default function LoginForm() {
   return (
     <form action={dispatch} className="space-y-3">
       <div className="flex-1 rounded-lg px-6 pb-4 pt-8">
-        <h1 className="mb-3 text-2xl">Please log in to continue.</h1>
+        <p>Enter your email address to reset your password</p>
         <div className="w-full">
           <div>
             <label
@@ -37,47 +37,10 @@ export default function LoginForm() {
               {/* <AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
             </div>
           </div>
-          <div className="mt-4">
-            <label
-              className="mb-3 mt-5 block text-xs font-medium text-gray-900"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <div className="relative">
-              <input
-                className="peer block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500"
-                id="password"
-                type="password"
-                name="password"
-                placeholder="Enter password"
-                required
-                minLength={6}
-              />
-              {/* <KeyIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" /> */}
-            </div>
-          </div>
-        </div>
-        <div className="mt-2">
-          <Link
-            href={AllRoutesEnum.FORGET_PASSWORD}
-            className="text-sm font-bold"
-          >
-            Forgot Password
-          </Link>
         </div>
         <Button className="mx-auto w-full mt-5" loading={loading}>
-          Log in
+          Reset Password
         </Button>
-        <div className="flex justify-center items-center gap-1 mt-2">
-          Don't have an account?
-          <Link
-            href={AllRoutesEnum.SIGNUP}
-            className="cursor-pointer font-bold"
-          >
-            Sign up
-          </Link>
-        </div>
         <div className="flex h-8 items-end space-x-1">
           <div
             className="flex h-8 items-end space-x-1"

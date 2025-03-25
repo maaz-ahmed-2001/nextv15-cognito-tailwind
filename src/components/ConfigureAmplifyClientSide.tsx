@@ -1,13 +1,10 @@
 "use client";
-import { Amplify, type ResourcesConfig } from "aws-amplify";
+import { Amplify } from "aws-amplify";
+import { authConfig } from "@/lib/amplify-config";
 
-export const authConfig: ResourcesConfig["Auth"] = {
-  Cognito: {
-    userPoolId: String(process.env.NEXT_PUBLIC_AWS_USER_POOLS_ID),
-    userPoolClientId: String(process.env.NEXT_PUBLIC_AWS_COGNITO_CLIENT_ID),
-  },
-};
+// Only configure Amplify on the client side
 Amplify.configure({ Auth: authConfig }, { ssr: true });
+
 export default function ConfigureAmplifyClientSide() {
   return null;
 }

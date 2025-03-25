@@ -5,4 +5,5 @@ export enum AllRoutesEnum {
   FORGOT_PASSWORD = "/auth/forgot-password",
   RESET_PASSWORD = "/auth/reset-password",
   DASHBOARD = "/",
+  FORGET_PASSWORD = "/auth/forget-password",
 }
