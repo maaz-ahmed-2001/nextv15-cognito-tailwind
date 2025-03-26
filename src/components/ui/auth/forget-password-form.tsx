@@ -1,15 +1,15 @@
 "use client";
 
 import { useFormStatus } from "react-dom";
-import { handleSignIn } from "@/lib/cognito-actions";
+import { handleForgotPassword } from "@/lib/cognito-actions";
 import Link from "next/link";
 import { useActionState } from "react";
 import Button from "../Button";
 import { AllRoutesEnum } from "@/lib/enums";
 
 export default function ForgetPasswordForm() {
-  const [errorMessage, dispatch, loading] = useActionState(
-    handleSignIn,
+  const [message, dispatch, loading] = useActionState(
+    handleForgotPassword,
     undefined
   );
 
@@ -41,16 +41,27 @@ export default function ForgetPasswordForm() {
         <Button className="mx-auto w-full mt-5" loading={loading}>
           Reset Password
         </Button>
+        <div className="flex justify-center items-center gap-1 mt-4">
+          <Link href={AllRoutesEnum.LOGIN} className="cursor-pointer font-bold">
+            Back to Login
+          </Link>
+        </div>
         <div className="flex h-8 items-end space-x-1">
           <div
             className="flex h-8 items-end space-x-1"
             aria-live="polite"
             aria-atomic="true"
           >
-            {errorMessage && (
+            {message && (
               <>
                 {/* <ExclamationCircleIcon className="h-5 w-5 text-red-500" /> */}
-                <p className="text-sm text-red-500">{errorMessage}</p>
+                <p
+                  className={`text-sm ${
+                    message.type === "error" ? "text-red-500" : "text-green-500"
+                  }`}
+                >
+                  {message.text}
+                </p>
               </>
             )}
           </div>

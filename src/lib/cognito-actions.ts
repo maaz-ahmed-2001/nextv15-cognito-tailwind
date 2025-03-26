@@ -5,12 +5,14 @@ import {
   signOut,
   signUp,
   autoSignIn,
+  resetPassword,
+  confirmResetPassword,
 } from "aws-amplify/auth";
 import { redirect } from "next/navigation";
 import { AllRoutesEnum } from "./enums";
 import { getErrorMessage } from "./get-error-message";
 
-const { CONFIRM_SIGNUP, DASHBOARD, LOGIN } = AllRoutesEnum;
+const { CONFIRM_SIGNUP, DASHBOARD, LOGIN, RESET_PASSWORD } = AllRoutesEnum;
 
 export async function handleSignUp(
   prevState: string | undefined,
@@ -31,7 +33,7 @@ export async function handleSignUp(
   } catch (e) {
     getErrorMessage(e);
   }
-  redirect(CONFIRM_SIGNUP);
+  redirect(`${CONFIRM_SIGNUP}?email=${String(formData.get("email"))}`);
 }
 
 export async function handleSendEmailVerificationCode(
@@ -69,7 +71,6 @@ export async function handleConfirmSignUp(
   } catch (e) {
     getErrorMessage(e);
   }
-  redirect(LOGIN);
 }
 
 export async function handleSignIn(
@@ -101,4 +102,39 @@ export async function handleSignOut() {
     console.log(getErrorMessage(error));
   }
   redirect(LOGIN);
+}
+
+export async function handleForgotPassword(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  try {
+    const email = String(formData.get("email"));
+    await resetPassword({
+      username: email,
+    });
+    return { type: "success", text: "Request sent! Check your email" };
+  } catch (e) {
+    return { type: "error", text: getErrorMessage(e) };
+  }
+}
+
+export async function handleResetPasswordConfirmation(
+  prevState: string | undefined,
+  formData: FormData
+) {
+  let redirectLink;
+  try {
+    await confirmResetPassword({
+      username: String(formData.get("email")),
+      confirmationCode: String(formData.get("code")),
+      newPassword: String(formData.get("password")),
+    });
+    redirectLink = LOGIN;
+  } catch (e) {
+    return getErrorMessage(e);
+  }
+  if (redirectLink) {
+    redirect(redirectLink);
+  }
 }

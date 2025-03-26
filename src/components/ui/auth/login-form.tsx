@@ -1,17 +1,44 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
-import { handleSignIn } from "@/lib/cognito-actions";
+import { handleConfirmSignUp, handleSignIn } from "@/lib/cognito-actions";
 import Link from "next/link";
-import { useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import Button from "../Button";
 import { AllRoutesEnum } from "@/lib/enums";
+import { getEmailFromQueryParams } from "@/utils/common";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export default function LoginForm() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const email = getEmailFromQueryParams("email");
+  const code = searchParams.get("code");
+
   const [errorMessage, dispatch, loading] = useActionState(
     handleSignIn,
     undefined
   );
+
+  useEffect(() => {
+    if (email && code) {
+      const confirmEmail = async () => {
+        const formData = new FormData();
+        formData.append("email", email);
+        formData.append("code", code);
+
+        startTransition(async () => {
+          try {
+            await handleConfirmSignUp(undefined, formData);
+            router.replace(`${AllRoutesEnum.LOGIN}?email=${email}`);
+          } catch (error) {
+            console.error("Email confirmation failed:", error);
+          }
+        });
+      };
+
+      confirmEmail();
+    }
+  }, [email, code]);
 
   return (
     <form action={dispatch} className="space-y-3">
