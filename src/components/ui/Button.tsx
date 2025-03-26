@@ -13,8 +13,6 @@ const Button = ({
   loading = false,
   ...props
 }: ButtonProps) => {
-  console.log(loading, "__loading");
-
   return (
     <button
       disabled={loading}
